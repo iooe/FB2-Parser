@@ -1,0 +1,30 @@
+{
+  "name": "tizis/fb2-parser",
+  "description": "Simple FB2 to HTML parser",
+  "version": "0.5",
+  "type": "library",
+  "keywords": ["FB2Parser", "parser", "fb2", "html", "php"],
+  "license": "MIT",
+  "homepage": "https://github.com/tizis/FB2Parser",
+  "authors": [
+    {
+      "name": "Epanchenko Roman",
+      "email": "podstavat@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.0",
+    "intervention/image": "^2.4",
+    "imangazaliev/didom": "^1.13",
+    "symfony/filesystem": "^4.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "FB2\\": "src/"
+    }
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-master",
+    "symfony/var-dumper": "^4.0"
+  }
+}
