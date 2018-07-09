@@ -3,7 +3,7 @@
 FB2Parser is a PHP parser for fb2 books.
 
 ### Getting Started
-1. `composer require tizis/fb2parser`
+1. `composer require tizis/fb2-parser`
 2. See example
 
 ## Features
