@@ -2,7 +2,7 @@
 
 include '../vendor/autoload.php';
 
-use FB2\FB2Controller;
+use Tizis\FB2\FB2Controller;
 
 $imagesPath = $_SERVER['DOCUMENT_ROOT'].'/img/1';
 $file = file_get_contents('FILENAME.fb2');

@@ -1,11 +1,11 @@
 <?php
 
-namespace FB2\Parser;
+namespace Tizis\FB2\Parser;
 
-use FB2\Helpers\DocumentFormatter;
-use FB2\Model\Chapter as ChapterModel;
-use FB2\Parser\Chapter\ChapterImages;
-use FB2\Parser\Chapter\ChapterNotes;
+use Tizis\FB2\Helpers\DocumentFormatter;
+use Tizis\FB2\Model\Chapter as ChapterModel;
+use Tizis\FB2\Parser\Chapter\ChapterImages;
+use Tizis\FB2\Parser\Chapter\ChapterNotes;
 
 /**
  * Class Chapters

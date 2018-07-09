@@ -1,8 +1,8 @@
 <?php
 
-namespace FB2\Parser;
+namespace Tizis\FB2\Parser;
 
-use FB2\Model\Author as AuthorModel;
+use Tizis\FB2\Model\Author as AuthorModel;
 
 /**
  * Class Authors

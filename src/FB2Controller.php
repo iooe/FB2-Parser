@@ -1,8 +1,8 @@
 <?php
 
-namespace FB2;
+namespace Tizis\FB2;
 
-use FB2\Helpers\FileHandler;
+use Tizis\FB2\Helpers\FileHandler;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace FB2;
+namespace Tizis\FB2;
 
 /**
  * Class FB2ClassAttributesHandler

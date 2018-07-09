@@ -1,6 +1,6 @@
 <?php
 
-namespace FB2\Model;
+namespace Tizis\FB2\Model;
 /**
  * Class Chapter
  * @package FB2\Model

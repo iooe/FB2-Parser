@@ -20,7 +20,7 @@
   },
   "autoload": {
     "psr-4": {
-      "FB2\\": "src/"
+      "Tizis\\FB2\\": "src/"
     }
   },
   "require-dev": {

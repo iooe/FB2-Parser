@@ -1,6 +1,6 @@
 <?php
 
-namespace FB2\Parser\Chapter;
+namespace Tizis\FB2\Parser\Chapter;
 
 interface IChapterNodes
 {

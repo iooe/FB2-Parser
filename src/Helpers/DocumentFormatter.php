@@ -1,6 +1,6 @@
 <?php
 
-namespace FB2\Helpers;
+namespace Tizis\FB2\Helpers;
 
 use DiDom\Document;
 use DiDom\Element;

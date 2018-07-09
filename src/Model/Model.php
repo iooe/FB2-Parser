@@ -1,8 +1,8 @@
 <?php
 
-namespace FB2\Model;
+namespace Tizis\FB2\Model;
 
-use FB2\FB2ClassAttributesHandler;
+use Tizis\FB2\FB2ClassAttributesHandler;
 
 /**
  * Class Model

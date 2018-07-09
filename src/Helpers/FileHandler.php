@@ -1,6 +1,6 @@
 <?php
 
-namespace FB2\Helpers;
+namespace Tizis\FB2\Helpers;
 /**
  * Class FileHandler
  * @package FB2\Helpers

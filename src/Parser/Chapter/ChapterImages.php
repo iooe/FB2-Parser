@@ -1,9 +1,9 @@
 <?php
 
-namespace FB2\Parser\Chapter;
+namespace Tizis\FB2\Parser\Chapter;
 
 use DiDom\Element;
-use FB2\Parser\Parser;
+use Tizis\FB2\Parser\Parser;
 use Intervention\Image\ImageManagerStatic as Image;
 
 /**

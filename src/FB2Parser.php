@@ -1,9 +1,9 @@
 <?php
 
-namespace FB2;
+namespace Tizis\FB2;
 
 use DiDom\Document;
-use FB2\Model\Book;
+use Tizis\FB2\Model\Book;
 
 /**
  * Class FB2Parser

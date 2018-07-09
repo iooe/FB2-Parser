@@ -1,8 +1,8 @@
 <?php
 
-namespace FB2\Parser;
+namespace Tizis\FB2\Parser;
 
-use FB2\FB2ClassAttributesHandler;
+use Tizis\FB2\FB2ClassAttributesHandler;
 
 /**
  * Class Parser

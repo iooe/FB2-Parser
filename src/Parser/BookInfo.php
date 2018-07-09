@@ -1,8 +1,8 @@
 <?php
 
-namespace FB2\Parser;
+namespace Tizis\FB2\Parser;
 
-use FB2\Model\BookInfo as BookInfoModel;
+use Tizis\FB2\Model\BookInfo as BookInfoModel;
 
 /**
  * Class BookInfo
