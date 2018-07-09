@@ -23,7 +23,7 @@ class ChapterImages extends Parser implements IChapterNodes
    * @param array $images
    * @param array $attributes
    */
-  public function __construct(&$chapterDOM, array $images, array $attributes)
+  public function __construct($chapterDOM, array $images, array $attributes)
   {
     $this->set('chapterDOM', $chapterDOM);
     $this->set('images', $images);
@@ -71,7 +71,7 @@ class ChapterImages extends Parser implements IChapterNodes
         Image::make(base64_decode($binary['content']))->save($imagesDirectory . '/' . $counter . '.jpg');
         // make new img element
         $href = $imagesWebPath ? $imagesWebPath . '/' . $counter . '.jpg' : $counter . '.jpg';
-        $element = new Element('img', '', ['href' => $href]);
+        $element = new Element('img', '', ['src' => $href]);
         $node->replace($element);
         $this->insert('attributes', $counter + 1, 'imagesCounter');
         $counter++;

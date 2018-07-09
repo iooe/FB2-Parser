@@ -21,7 +21,7 @@ class ChapterNotes extends Parser implements IChapterNodes
    * @param $xmlDOM
    * @param array $attributes
    */
-  public function __construct(&$chapterDOM, &$xmlDOM, array $attributes)
+  public function __construct($chapterDOM, $xmlDOM, array $attributes)
   {
     $this->set('chapterDOM', $chapterDOM);
     $this->set('xmlDOM', $xmlDOM);
