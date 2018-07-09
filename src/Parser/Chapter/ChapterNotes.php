@@ -96,7 +96,10 @@ class ChapterNotes extends Parser implements IChapterNodes
       $hr = new Element('hr');
       $li = [];
       foreach ($notes as $note) {
-        $li[] = new Element('li', $note['content'], ['id' => $note['id']]);
+        $p = new Element('p', strip_tags(html_entity_decode($note['content']), '<a>'));
+        $el = new Element('li', '', ['id' => $note['id']]);
+        $el->appendChild($p);
+        $li[] = $el;
       }
       $ul->appendChild($li);
       $wrapper = new Element('div');
