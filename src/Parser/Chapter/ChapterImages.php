@@ -61,19 +61,23 @@ class ChapterImages extends Parser implements IChapterNodes
     $imagesDirectory = $this->get('attributes')['imagesDirectory'];
     $counter = $this->get('attributes')['imagesCounter'];
     // each images
+
     $nodes = (array)$this->get('chapterDOM')->findInDocument('image');
-    foreach ($nodes as $node) {
-      $noteId = trim($node->attr($linkType . ':href'), '#');
-      // if images is exist
-      if (!empty($noteId) && ($binary = $this->get('images')[$noteId])) {
-        // save image
-        Image::make(base64_decode($binary['content']))->save($imagesDirectory . '/' . $counter . '.jpg');
-        // make new img element
-        $href = $imagesWebPath ? $imagesWebPath . '/' . $counter . '.jpg' : $counter . '.jpg';
-        $element = new Element('img', '', ['src' => $href]);
-        $node->replace($element);
-        $this->insert('attributes', $counter + 1, 'imagesCounter');
-        $counter++;
+
+    if (\count($nodes) !== 0) {
+      foreach ($nodes as $node) {
+        $noteId = trim($node->attr($linkType . ':href'), '#');
+        // if images is exist
+        if ($binary = $this->get('images')[$noteId]) {
+          // save image
+          Image::make(base64_decode($binary['content']))->save($imagesDirectory . '/' . $counter . '.jpg');
+          // make new img element
+          $href = $imagesWebPath ? $imagesWebPath . '/' . $counter . '.jpg' : $counter . '.jpg';
+          $element = new Element('img', '', ['src' => $href]);
+          $node->replace($element);
+          $this->insert('attributes', $counter + 1, 'imagesCounter');
+          $counter++;
+        }
       }
     }
     $this->insert('attributes', $counter, 'imagesCounter');
