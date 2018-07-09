@@ -15,4 +15,4 @@ FB2Parser is a PHP parser for fb2 books.
     - ...
 - Images Parsing
 - Content Parsing
-- Notes Сonversion
+- Conversion of notes
