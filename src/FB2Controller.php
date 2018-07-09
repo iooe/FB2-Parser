@@ -63,7 +63,6 @@ class FB2Controller extends FB2ClassAttributesHandler
       }
       if ($key === 'imagesWebPath') {
         $this->insert('attributes', (string)$attribute, 'imagesWebPath');
-
       }
     }
     $fileSystem = new Filesystem();

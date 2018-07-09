@@ -3,8 +3,8 @@
 namespace Tizis\FB2\Parser\Chapter;
 
 use DiDom\Element;
-use Tizis\FB2\Parser\Parser;
 use Intervention\Image\ImageManagerStatic as Image;
+use Tizis\FB2\Parser\Parser;
 
 /**
  * Class ChapterImages
@@ -28,7 +28,6 @@ class ChapterImages extends Parser implements IChapterNodes
     $this->set('chapterDOM', $chapterDOM);
     $this->set('images', $images);
     $this->set('attributes', $attributes);
-
   }
 
   /**
