@@ -60,7 +60,8 @@ class ChapterImages extends Parser implements IChapterNodes
       foreach ($nodes as $node) {
         $noteId = trim($node->attr($linkType . ':href'), '#');
         // if images is exist
-        if ($image = $images[$noteId]) {
+        if (isset($images[$noteId])) {
+          $image = $images[$noteId];
           // save image
           Image::make(base64_decode($image['content']))->save($imagesDirectory . '/' . $image['id'] . '.jpg');
           // make new img element

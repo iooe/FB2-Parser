@@ -10,23 +10,23 @@ class BookInfo implements IModel
   /**
    * @var string
    */
-  protected $title = '';
+  private $title = '';
   /**
    * @var string
    */
-  protected $annotation = '';
+  private $annotation = '';
   /**
    * @var array
    */
-  protected $genres = [];
+  private $genres = [];
   /**
    * @var string
    */
-  protected $keywords = '';
+  private $keywords = '';
   /**
    * @var array
    */
-  protected $lang = [
+  private $lang = [
     'lang' => null,
     'src' => null
   ];

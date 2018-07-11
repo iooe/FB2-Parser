@@ -10,19 +10,19 @@ class Book
   /**
    * @var array
    */
-  public $authors = [];
+  private $authors = [];
   /**
    * @var array
    */
-  public $translators = [];
+  private $translators = [];
   /**
    * @var array
    */
-  public $chapters = [];
+  private $chapters = [];
   /**
    * @var BookInfo
    */
-  public $info = [];
+  private $info = [];
 
   /**
    * @return BookInfo

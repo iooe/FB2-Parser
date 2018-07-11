@@ -10,11 +10,11 @@ class Chapter implements IModel
   /**
    * @var string
    */
-  protected $title = '';
+  private $title = '';
   /**
    * @var string
    */
-  protected $content;
+  private $content;
 
 
   /**
