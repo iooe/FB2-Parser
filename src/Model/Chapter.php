@@ -5,16 +5,49 @@ namespace Tizis\FB2\Model;
  * Class Chapter
  * @package FB2\Model
  */
-class Chapter extends Model
+class Chapter implements IModel
 {
-  public $title;
-  public $content;
+  /**
+   * @var string
+   */
+  protected $title = '';
+  /**
+   * @var string
+   */
+  protected $content;
+
 
   /**
-   * Book constructor.
+   * @return string
    */
-  public function __construct()
+  public function getContent(): string
   {
-    $this->unset('attributes');
+    return $this->content;
   }
+
+  /**
+   * @param string $value
+   */
+  public function setContent($value): void
+  {
+    $this->content = $value;
+  }
+
+
+  /**
+   * @return string
+   */
+  public function getTitle(): string
+  {
+    return $this->title;
+  }
+
+  /**
+   * @param string $value
+   */
+  public function setTitle(string $value): void
+  {
+    $this->title = $value;
+  }
+
 }

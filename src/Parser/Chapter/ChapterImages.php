@@ -8,26 +8,18 @@ use Tizis\FB2\Parser\Parser;
 
 /**
  * Class ChapterImages
- * @package FB2\Parser\Chapter
+ * @package Tizis\FB2\Parser\Chapter
  */
 class ChapterImages extends Parser implements IChapterNodes
 {
 
-  protected $chapterDOM;
-  protected $images = [];
-  protected $imagesCounter = 0;
-
   /**
    * ChapterImages constructor.
-   * @param $chapterDOM
-   * @param array $images
-   * @param array $attributes
+   * @param Element $element
    */
-  public function __construct($chapterDOM, array $images, array $attributes)
+  public function __construct(Element $element)
   {
-    $this->set('chapterDOM', $chapterDOM);
-    $this->set('images', $images);
-    $this->set('attributes', $attributes);
+    $this->setXmlElement($element);
   }
 
   /**
@@ -42,12 +34,12 @@ class ChapterImages extends Parser implements IChapterNodes
       // else remove images from chapter
       $this->removeImages();
     }
-    return $this->get('chapterDOM');
+    return $this->getXmlElement();
   }
 
   private function isWithImages(): bool
   {
-    $attributes = $this->get('attributes');
+    $attributes = $this->getAttributes();
     return $attributes['isImages'] === true && $attributes['imagesDirectory'] !== false;
   }
 
@@ -56,31 +48,28 @@ class ChapterImages extends Parser implements IChapterNodes
    */
   private function imagesHandler(): void
   {
-    $imagesWebPath = $this->get('attributes')['imagesWebPath'];
-    $linkType = $this->get('attributes')['linkType'];
-    $imagesDirectory = $this->get('attributes')['imagesDirectory'];
-    $counter = $this->get('attributes')['imagesCounter'];
+    $imagesWebPath = $this->getAttributes()['imagesWebPath'];
+    $linkType = $this->getAttributes()['linkType'];
+    $images = $this->getAttributes()['images'];
+    $imagesDirectory = $this->getAttributes()['imagesDirectory'];
     // each images
 
-    $nodes = (array)$this->get('chapterDOM')->findInDocument('image');
+    $nodes = (array)$this->getXmlElement()->findInDocument('image');
 
     if (\count($nodes) !== 0) {
       foreach ($nodes as $node) {
         $noteId = trim($node->attr($linkType . ':href'), '#');
         // if images is exist
-        if ($binary = $this->get('images')[$noteId]) {
+        if ($image = $images[$noteId]) {
           // save image
-          Image::make(base64_decode($binary['content']))->save($imagesDirectory . '/' . $counter . '.jpg');
+          Image::make(base64_decode($image['content']))->save($imagesDirectory . '/' . $image['id'] . '.jpg');
           // make new img element
-          $href = $imagesWebPath ? $imagesWebPath . '/' . $counter . '.jpg' : $counter . '.jpg';
+          $href = $imagesWebPath ? $imagesWebPath . '/' . $image['id'] . '.jpg' : $image['id'] . '.jpg';
           $element = new Element('img', '', ['src' => $href]);
           $node->replace($element);
-          $this->insert('attributes', $counter + 1, 'imagesCounter');
-          $counter++;
         }
       }
     }
-    $this->insert('attributes', $counter, 'imagesCounter');
   }
 
   /**
@@ -88,7 +77,7 @@ class ChapterImages extends Parser implements IChapterNodes
    */
   private function removeImages(): void
   {
-    $nodes = (array)$this->get('chapterDOM')->findInDocument('image');
+    $nodes = (array)$this->getXmlElement()->findInDocument('image');
     foreach ($nodes as $node) {
       $node->remove();
     }
@@ -96,6 +85,6 @@ class ChapterImages extends Parser implements IChapterNodes
 
   public function getCounter(): int
   {
-    return $this->get('attributes')['imagesCounter'];
+    return $this->getAttributes()['imagesCounter'];
   }
 }

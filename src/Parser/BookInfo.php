@@ -2,6 +2,7 @@
 
 namespace Tizis\FB2\Parser;
 
+use DiDom\Element;
 use Tizis\FB2\Model\BookInfo as BookInfoModel;
 
 /**
@@ -12,26 +13,25 @@ class BookInfo extends Parser
 {
   /**
    * BookInfo constructor.
-   * @param $xmlDOM
+   * @param $element
    */
-  public function __construct(&$xmlDOM)
+  public function __construct(Element $element)
   {
-    $this->set('xmlDOM', $xmlDOM);
-    $this->set('model', new BookInfoModel);
+    $this->setXmlElement($element);
+    $this->setModel(new BookInfoModel());
   }
 
   /**
-   * start parse
+   * @return BookInfoModel
    */
-  public function parse()
+  public function parse(): BookInfoModel
   {
     $this->parseTitle();
     $this->parseAnnotation();
     $this->parseLang();
     $this->parseGenres();
     $this->parseKeywords();
-    $this->set('response', $this->model);
-    return $this->get('response');
+    return $this->getModel();
   }
 
   /**
@@ -39,9 +39,17 @@ class BookInfo extends Parser
    */
   private function parseTitle(): void
   {
-    $bookTitleNode = $this->get('xmlDOM')->first('book-title');
+    $bookTitleNode = $this->getXmlElement()->first('book-title');
     $bookTitle = $bookTitleNode && $bookTitleNode->text() ? trim($bookTitleNode->text()) : '';
-    $this->get('model')->set('title', $bookTitle);
+    $this->getModel()->setTitle($bookTitle);
+  }
+
+  /**
+   * @return BookInfoModel
+   */
+  public function getModel(): BookInfoModel
+  {
+    return $this->model;
   }
 
   /**
@@ -49,9 +57,9 @@ class BookInfo extends Parser
    */
   private function parseAnnotation(): void
   {
-    $bookTitleNode = $this->get('xmlDOM')->first('annotation');
-    $bookTitle = $bookTitleNode && $bookTitleNode->html() ? trim(strip_tags($bookTitleNode->innerHtml(), '<p>')) : '';
-    $this->get('model')->set('annotation', $bookTitle);
+    $bookAnnotationNode = $this->getXmlElement()->first('annotation');
+    $bookAnnotation = $bookAnnotationNode && $bookAnnotationNode->html() ? trim(strip_tags($bookAnnotationNode->innerHtml(), '<p>')) : '';
+    $this->getModel()->setAnnotation($bookAnnotation);
   }
 
   /**
@@ -59,17 +67,16 @@ class BookInfo extends Parser
    */
   private function parseLang(): void
   {
-    $xmlDOM = $this->get('xmlDOM');
-    $model = $this->get('model');
+    $xmlDOM = $this->getXmlElement();
+    $model = $this->getModel();
     // nodes
     $langNode = $xmlDOM->first('lang');
     $srcLangNode = $xmlDOM->first('src-lang');
     // current lang && original lang
-    $lang = $langNode && $langNode->text() ? trim($langNode->text()) : null;
-    $srcLang = $srcLangNode && $srcLangNode->text() ? trim($srcLangNode->text()) : null;
+    $lang['lang'] = $langNode && $langNode->text() ? trim($langNode->text()) : null;
+    $lang['src'] = $srcLangNode && $srcLangNode->text() ? trim($srcLangNode->text()) : null;
     // set lang
-    $model->insert('lang', $lang, 'lang');
-    $model->insert('lang', $srcLang, 'src');
+    $model->setLang($lang);
   }
 
   /**
@@ -77,14 +84,16 @@ class BookInfo extends Parser
    */
   private function parseGenres(): void
   {
-    $items = (array)$this->get('xmlDOM')->find('genre');
-    $model = $this->get('model');
+    $items = (array)$this->getXmlElement()->find('genre');
+    $genres = [];
+    $model = $this->getModel();
     foreach ($items as $item) {
       $item = trim($item->text());
       if (!empty($item)) {
-        $model->insert('genres', $item);
+        $genres[] = $item;
       }
     }
+    $model->setGenres($genres);
   }
 
   /**
@@ -92,9 +101,9 @@ class BookInfo extends Parser
    */
   private function parseKeywords(): void
   {
-    $item = $this->get('xmlDOM')->first('keywords');
+    $item = $this->getXmlElement()->first('keywords');
     if ($item && $item->text()) {
-      $this->get('model')->set('keywords', trim($item->text()));
+      $this->getModel()->setKeywords(trim($item->text()));
     }
   }
 }

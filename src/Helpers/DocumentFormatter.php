@@ -76,13 +76,52 @@ class DocumentFormatter
   {
     $images = [];
     $nodes = (array)$document->find('binary');
+    $counter = 0;
     foreach ($nodes as $node) {
       $imageId = $node->attr('id');
       $images[$imageId] = [
-        'id' => $imageId,
+        'id' => $counter,
+        'id_original' => $imageId,
         'content' => $node->innerHtml()
       ];
+      $node->remove();
+      $counter++;
     }
-    return $images;
+    $response['images'] = $images;
+    $response['xmlDOM'] = $document;
+    return $response;
+  }
+
+  /**
+   * @param Document $document
+   * @param $linkType
+   * @return array
+   */
+  public static function getBookNotes(Document $document, $linkType): array
+  {
+    $counter = 0;
+    $notes = [];
+    $nodes = (array)$document->find('a[type=note]');
+    foreach ($nodes as $node) {
+      $noteId = trim($node->attr($linkType . ':href'), '#');
+      $noteContentId = 'section#' . $noteId;
+      if (($noteContentNode = $document->first($noteContentId)) !== null) {
+        $noteContent = trim(str_replace(
+          $noteContentNode->first('title'),
+          '',
+          $noteContentNode->innerHtml()
+        ));
+        $notes[$noteId] = [
+          'id' => 'note_' . $counter,
+          'id_original' => $noteId,
+          'content' => $noteContent
+        ];
+        $noteContentNode->remove();
+        $counter++;
+      }
+    }
+    $response['notes'] = $notes;
+    $response['xmlDOM'] = $document;
+    return $response;
   }
 }

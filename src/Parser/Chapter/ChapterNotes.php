@@ -11,21 +11,14 @@ use Tizis\FB2\Parser\Parser;
  */
 class ChapterNotes extends Parser implements IChapterNodes
 {
-  protected $chapterDOM;
-  protected $imagesCounter = 0;
-  protected $notes = [];
 
   /**
    * ChapterNotes constructor.
-   * @param $chapterDOM
-   * @param $xmlDOM
-   * @param array $attributes
+   * @param Element $element
    */
-  public function __construct($chapterDOM, $xmlDOM, array $attributes)
+  public function __construct(Element $element)
   {
-    $this->set('chapterDOM', $chapterDOM);
-    $this->set('xmlDOM', $xmlDOM);
-    $this->set('attributes', $attributes);
+    $this->setXmlElement($element);
   }
 
   /**
@@ -35,63 +28,50 @@ class ChapterNotes extends Parser implements IChapterNodes
   {
     // if parse with notes
     if ($this->isWithNotes()) {
-      $this->notesHandler();
-      $this->insertNotesIntoContent();
+      $notes = $this->notesHandler();
+      $this->insertNotesIntoContent($notes);
     } else {
       // else remove notes from chapter
       $this->removeNotesLinks();
     }
-    return $this->get('chapterDOM');
+    return $this->getXmlElement();
   }
 
   private function isWithNotes(): bool
   {
-    return $this->get('attributes')['isNotes'];
+    return $this->getAttributes()['isNotes'];
   }
 
   /**
-   * notes handler
+   * @return array
    */
-  private function notesHandler(): void
+  private function notesHandler(): array
   {
-    $linkType = $this->get('attributes')['linkType'];
-    $xmlDOM = $this->get('xmlDOM');
-    $nodes = (array)$this->get('chapterDOM')->findInDocument('a[type=note]');
-    $counter = $this->get('attributes')['imagesCounter'];
+    $globalNotes = $this->getAttributes()['notes'];
+    $chapterNotes = [];
+    $linkType = $this->getAttributes()['linkType'];
+    $nodes = (array)$this->getXmlElement()->findInDocument('a[type=note]');
     // each notes
     foreach ($nodes as $node) {
       // get note link
       $noteId = trim($node->attr($linkType . ':href'), '#');
-      $noteContentId = 'section#' . $noteId;
-      // if link container is exists
-      if ($xmlDOM->has($noteContentId)) {
-        // new id of note
-        $noteNewId = 'note_' . $counter;
-        // note content
-        $noteNode = $xmlDOM->first($noteContentId);
-        $noteContent = trim(str_replace($noteNode->first('title'), '', $noteNode->innerHtml()));
-        // save into notes array
-        $this->insert('notes', [
-          'id' => $noteNewId,
-          'original_id' => $noteId,
-          'content' => $noteContent
-        ]);
+      if ($note = $globalNotes[$noteId]) {
+        $chapterNotes[] = $note;
         // make new note link && replace
-        $element = new Element('a', $node->innerHtml(), ['href' => '#' . $noteNewId]);
+        $element = new Element('a', $node->innerHtml(), ['href' => '#' . $note['id']]);
         $node->replace($element);
-        $counter++;
       }
     }
-    $this->insert('attributes', $counter, 'imagesCounter');
+    return $chapterNotes;
   }
 
   /**
    * insert nodes block into chapter
+   * @param array $notes
    */
-  private function insertNotesIntoContent(): void
+  private function insertNotesIntoContent(array $notes): void
   {
-    if (\count($this->get('notes')) !== 0) {
-      $notes = (array)$this->get('notes');
+    if (\count($notes) !== 0) {
       $ul = new Element('ol');
       $hr = new Element('hr');
       $li = [];
@@ -105,7 +85,7 @@ class ChapterNotes extends Parser implements IChapterNodes
       $wrapper = new Element('div');
       $wrapper->appendChild($hr);
       $wrapper->appendChild($ul);
-      $this->chapterDOM->appendChild($wrapper);
+      $this->getXmlElement()->appendChild($wrapper);
     }
   }
 
@@ -114,15 +94,10 @@ class ChapterNotes extends Parser implements IChapterNodes
    */
   private function removeNotesLinks(): void
   {
-    $nodes = (array)$this->get('chapterDOM')->findInDocument('a[type=note]');
+    $nodes = (array)$this->getXmlElement()->findInDocument('a[type=note]');
     foreach ($nodes as $node) {
       $element = new Element('span', $node->innerHtml());
       $node->replace($element);
     }
-  }
-
-  public function getCounter(): int
-  {
-    return $this->get('attributes')['imagesCounter'];
   }
 }

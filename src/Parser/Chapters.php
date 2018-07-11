@@ -3,9 +3,8 @@
 namespace Tizis\FB2\Parser;
 
 use Tizis\FB2\Helpers\DocumentFormatter;
-use Tizis\FB2\Model\Chapter as ChapterModel;
+use Tizis\FB2\Parser\Chapter\Chapter;
 use Tizis\FB2\Parser\Chapter\ChapterImages;
-use Tizis\FB2\Parser\Chapter\ChapterNotes;
 
 /**
  * Class Chapters
@@ -13,9 +12,6 @@ use Tizis\FB2\Parser\Chapter\ChapterNotes;
  */
 class Chapters extends Parser
 {
-  protected $chapterDOM;
-  protected $images = [];
-
   /**
    * Chapters constructor.
    * @param $xmlDOM
@@ -23,13 +19,28 @@ class Chapters extends Parser
    */
   public function __construct(&$xmlDOM, array $attributes = [])
   {
-    $this->set('xmlDOM', $xmlDOM);
-    $this->set('attributes', $attributes);
+    $this->setXmlDOM($xmlDOM);
+    $this->setAttributes($attributes);
     // set document link prefix, fb2 access custom prefix for links
-    $this->insert('attributes', DocumentFormatter::getDocumentLinkPrefix($xmlDOM), 'linkType');
+    $this->insertAttributes(DocumentFormatter::getDocumentLinkPrefix($xmlDOM), 'linkType');
     // global notes|images counters. Needs for note element identifications.
-    $this->insert('attributes', 0, 'imagesCounter');
-    $this->insert('attributes', 0, 'notesCounter');
+    $this->insertAttributes(0, 'imagesCounter');
+    $this->loadElements();
+  }
+
+  /**
+   *
+   */
+  private function loadElements(): void
+  {
+    $formatter = DocumentFormatter::getBinaryImages($this->getXmlDOM());
+    $this->insertAttributes($formatter['images'], 'images');
+
+    $formatter = DocumentFormatter::getBookNotes($formatter['xmlDOM'], $this->getAttributes()['linkType']);
+    $this->insertAttributes($formatter['notes'], 'notes');
+
+
+    $this->setXmlDOM($formatter['xmlDOM']);
   }
 
   /**
@@ -38,67 +49,22 @@ class Chapters extends Parser
    */
   public function parse(): array
   {
+    $response = [];
     $items = (array)$this->xmlDOM->find('body>section');
     foreach ($items as $key => $item) {
-      $this->set('model', new ChapterModel());
-      $this->set('chapterDOM', $item);
-      $this->set('chapterNodes', []);
-      $this->titleHandler();
-      $this->notesHandler();
-      $this->imagesHandler();
-      $this->contentHandler();
-      $this->insert('response', $this->model);
+      $chapter = new Chapter($item);
+      $chapter->setAttributes($this->getAttributes());
+      $response[] = $chapter->parse();
     }
-    return $this->get('response');
+    return $response;
   }
 
   /**
-   * set chapter title && update chapterDOM
+   * @return Chapter
    */
-  private function titleHandler(): void
+  public function getModel(): Chapter
   {
-    $chapterDOM = $this->get('chapterDOM');
-    if ($chapterDOM->has('title')) {
-      $title = $chapterDOM->firstInDocument('title');
-      $this->get('model')->set('title', $title->text());
-      $title->remove();
-    }
+    return $this->model;
   }
 
-  /**
-   * notes handler && update chapterDOM
-   */
-  private function notesHandler(): void
-  {
-    $notesParser = new ChapterNotes($this->get('chapterDOM'), $this->get('xmlDOM'), $this->get('attributes'));
-    $this->set('chapterDOM', $notesParser->parse());
-    // update global notes counter
-    $this->insert('attributes', $notesParser->getCounter(), 'notesCounter');
-  }
-
-  /**
-   * save images && update chapterDOM
-   */
-  private function imagesHandler(): void
-  {
-    if (\count($this->get('images')) === 0) {
-      $this->set('images', DocumentFormatter::getBinaryImages($this->get('xmlDOM')));
-    }
-    $imagesParser = new ChapterImages($this->get('chapterDOM'), $this->get('images'), $this->get('attributes'));
-    $this->set('chapterDOM', $imagesParser->parse());
-    // update global images counter
-    $this->insert('attributes', $imagesParser->getCounter(), 'imagesCounter');
-  }
-
-  /**
-   * content cleaner
-   */
-  private function contentHandler(): void
-  {
-    // replace some nodes
-    DocumentFormatter::nodesReplace($this->chapterDOM);
-    // replace fb2 nodes to html standard nodes
-    $content = DocumentFormatter::FB2TagsToHTML($this->chapterDOM->innerHtml());
-    $this->get('model')->set('content', $content);
-  }
 }

@@ -2,15 +2,15 @@
 
 namespace Tizis\FB2;
 
-use Tizis\FB2\Helpers\FileHandler;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Tizis\FB2\Helpers\FileHandler;
 
 /**
  * Class FB2Controller
  * @package FB2
  */
-class FB2Controller extends FB2ClassAttributesHandler
+class FB2Controller extends FB2AttributesManager
 {
 
   protected $xml;
@@ -31,7 +31,7 @@ class FB2Controller extends FB2ClassAttributesHandler
   public function startParse(): void
   {
     $FB2Parser = new FB2Parser($this->xml);
-    $FB2Parser->setAttributes($this->get('attributes'));
+    $FB2Parser->loadAttributes($this->getAttributes());
     $FB2Parser->startParse();
     $this->book = $FB2Parser->getBook();
   }
@@ -56,18 +56,18 @@ class FB2Controller extends FB2ClassAttributesHandler
    */
   public function withImages(array $attributes): void
   {
-    $this->insert('attributes', true, 'isImages');
+    $this->insertAttributes(true, 'isImages');
     foreach ($attributes as $key => $attribute) {
       if ($key === 'directory') {
-        $this->insert('attributes', $attribute, 'imagesDirectory');
+        $this->insertAttributes($attribute, 'imagesDirectory');
       }
       if ($key === 'imagesWebPath') {
-        $this->insert('attributes', (string)$attribute, 'imagesWebPath');
+        $this->insertAttributes((string)$attribute, 'imagesWebPath');
       }
     }
     $fileSystem = new Filesystem();
     try {
-      $fileSystem->mkdir($this->get('attributes')['imagesDirectory']);
+      $fileSystem->mkdir($this->getAttributes()['imagesDirectory']);
     } catch (IOExceptionInterface $exception) {
       echo 'An error occurred while creating your directory at' . $exception->getPath();
     }
@@ -75,6 +75,6 @@ class FB2Controller extends FB2ClassAttributesHandler
 
   public function withNotes(): void
   {
-    $this->insert('attributes', true, 'isNotes');
+    $this->insertAttributes(true, 'isNotes');
   }
 }

@@ -9,9 +9,11 @@ use Tizis\FB2\Model\Book;
  * Class FB2Parser
  * @package FB2
  */
-class FB2Parser extends FB2ClassAttributesHandler
+class FB2Parser extends FB2AttributesManager
 {
-
+  /**
+   * @var Book
+   */
   protected $book;
   private $xmlDOM;
 
@@ -22,7 +24,7 @@ class FB2Parser extends FB2ClassAttributesHandler
   public function __construct($xml)
   {
     $this->loadElements($xml);
-    $this->set('attributes', [
+    $this->setAttributes([
       'isImages' => false,
       'imagesWebPath' => false,
       'imagesDirectory' => false,
@@ -53,32 +55,50 @@ class FB2Parser extends FB2ClassAttributesHandler
 
   private function parseAuthors(): void
   {
-    $this->book->authors = (new Parser\Authors($this->xmlDOM))->parse();
+    $items = [];
+    $nodes = (array)$this->xmlDOM->find('author');
+    foreach ($nodes as $node) {
+      $item = (new Parser\Author($node))->parse();
+      if ($item->getFullName()) {
+        $items[] = $item;
+      }
+    }
+    $this->book->setAuthors($items);
   }
 
   private function parseTranslators(): void
   {
-    $this->book->translators = (new Parser\Translators($this->xmlDOM))->parse();
+    $items = [];
+    $nodes = (array)$this->xmlDOM->find('translator');
+    foreach ($nodes as $node) {
+      $item = (new Parser\Translator($node))->parse();
+      if (!empty($item->getFullName())
+        || (null !== $item->getEmail())
+        || (null !== $item->getNickName())) {
+        $items[] = $item;
+      }
+    }
+    $this->book->setTranslators($items);
   }
 
   private function parseBookInfo(): void
   {
-    $this->book->info = (new Parser\BookInfo($this->xmlDOM))->parse();
+    $this->book->setInfo((new Parser\BookInfo($this->xmlDOM->first('description')))->parse());
   }
 
   private function parseChapters(): void
   {
-    $this->book->chapters = (new Parser\Chapters($this->xmlDOM, $this->attributes))->parse();
+    $this->book->setChapters((new Parser\Chapters($this->xmlDOM, $this->getAttributes()))->parse());
   }
 
   /**
    * @param array $attributes
    */
-  public function setAttributes(array $attributes): void
+  public function loadAttributes(array $attributes): void
   {
     foreach ($attributes as $attribute => $state) {
-      if ($this->get('attributes')[$attribute] !== null) {
-        $this->insert('attributes', $state, $attribute);
+      if ($this->getAttributes()[$attribute] !== null) {
+        $this->insertAttributes($state, $attribute);
       }
     }
   }
@@ -88,6 +108,6 @@ class FB2Parser extends FB2ClassAttributesHandler
    */
   public function getBook(): Book
   {
-    return $this->get('book');
+    return $this->book;
   }
 }

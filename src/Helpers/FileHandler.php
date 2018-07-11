@@ -16,5 +16,4 @@ class FileHandler
   {
     return str_replace('http://www.gribuser.ru/xml/fictionbook/2.0', '', $file);
   }
-
 }
