@@ -19,7 +19,9 @@ FB2Parser is a PHP parser for fb2 books.
 - Conversion of notes
 - 
 ## Public Accessors 
+--------
 FB2Controller-> ...
+--------
 | Name | desc |
 |--|--|
 | withNotes() |  parse with notes, else notes|will be deleted|
@@ -36,6 +38,7 @@ getBook()-> ...
 | getChapters() |  **return** array of Chapters objects|
 --------
 getAuthors()[$key]-> ...
+--------
 | Book | desc |
 |--|--|
 | getFirstName() |  **return** first name of the author|
@@ -43,6 +46,7 @@ getAuthors()[$key]-> ...
 | getFullName() |  **return** full name of the author|
 --------
 getTranslators()[$key]-> ...
+--------
 | Book | desc |
 |--|--|
 | getFirstName() |  **return** first name of the translator|
@@ -53,6 +57,7 @@ getTranslators()[$key]-> ...
 | getEmail() |  **return** email of the translator|
 --------
 getInfo()-> ...
+--------
 | Book | desc |
 |--|--|
 | getTitle() |  **return** title of the book|
@@ -62,6 +67,7 @@ getInfo()-> ...
 | getLang() |  **return** array of lang of the book|
 --------
 getChapters()[$key]-> ...
+--------
 | Book | desc |
 |--|--|
 | getTitle() |  **return** title of the chapter|
