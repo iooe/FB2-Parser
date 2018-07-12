@@ -3,7 +3,7 @@
 
 FB2Parser is a PHP parser for fb2 books.
 
-### Getting Started
+## Getting Started
 1. `composer require tizis/fb2-parser`
 2. See example
 
@@ -17,10 +17,9 @@ FB2Parser is a PHP parser for fb2 books.
 - Images Parsing
 - Content Parsing
 - Conversion of notes
-- 
-## Public Accessors 
---------
-FB2Controller-> ...
+-
+## Public Accessors
+### FB2Controller-> ...
 --------
 | Name | desc |
 |--|--|
@@ -29,7 +28,7 @@ FB2Controller-> ...
 | startParse()|  start parsing|
 | getBook() |  return Book object|
 --------
-getBook()-> ...
+### getBook()-> ...
 --------
 | Book | desc |
 |--|--|
@@ -38,7 +37,7 @@ getBook()-> ...
 | getInfo() |  **return** BookInfo object|
 | getChapters() |  **return** array of Chapters objects|
 --------
-getAuthors()[$key]-> ...
+### getAuthors()[$key]-> ...
 --------
 | Book | desc |
 |--|--|
@@ -46,7 +45,7 @@ getAuthors()[$key]-> ...
 | getLastName() |  **return** last name of the author|
 | getFullName() |  **return** full name of the author|
 --------
-getTranslators()[$key]-> ...
+### getTranslators()[$key]-> ...
 --------
 | Book | desc |
 |--|--|
@@ -57,7 +56,7 @@ getTranslators()[$key]-> ...
 | getNickName() |  **return** nickname of the translator|
 | getEmail() |  **return** email of the translator|
 --------
-getInfo()-> ...
+### getInfo()-> ...
 --------
 | Book | desc |
 |--|--|
@@ -67,7 +66,7 @@ getInfo()-> ...
 | getKeywords() |  **return** keywords of the book|
 | getLang() |  **return** array of lang of the book|
 --------
-getChapters()[$key]-> ...
+### getChapters()[$key]-> ...
 --------
 | Book | desc |
 |--|--|
