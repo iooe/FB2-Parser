@@ -30,6 +30,7 @@ FB2Controller-> ...
 | getBook() |  return Book object|
 --------
 getBook()-> ...
+--------
 | Book | desc |
 |--|--|
 | getAuthors() |  **return** array of Author objects|
