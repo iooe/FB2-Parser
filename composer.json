@@ -5,7 +5,7 @@
   "type": "library",
   "keywords": ["FB2Parser", "parser", "fb2", "html", "php"],
   "license": "MIT",
-  "homepage": "https://github.com/tizis/FB2Parser",
+  "homepage": "https://github.com/tizis/FB2-Parser",
   "authors": [
     {
       "name": "Epanchenko Roman",
