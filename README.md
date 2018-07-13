@@ -5,8 +5,8 @@ FB2Parser is a PHP parser for fb2 books.
 
 ## Getting Started
 1. `composer require tizis/fb2-parser`
-2. See example
-
+2. See public accessors list 
+3. See example
 ## Features
 - Information Parsing
     - Authors
@@ -17,13 +17,12 @@ FB2Parser is a PHP parser for fb2 books.
 - Images Parsing
 - Content Parsing
 - Conversion of notes
--
 ## Public Accessors
 ### FB2Controller-> ...
 | Name | desc |
 |--|--|
-| withNotes() |  parse with notes, else notes|will be deleted|
-| withImages(['directory' => ... , 'imagesWebPath' => ...] |  parse with images, else images|will be deleted|
+| withNotes() |  parse with notes, else notes will be deleted|
+| withImages(['directory' => ... , 'imagesWebPath' => ...] |  parse with images, else images will be deleted|
 | startParse()|  start parsing|
 | getBook() |  return Book object|
 --------
