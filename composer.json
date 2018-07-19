@@ -1,7 +1,7 @@
 {
   "name": "tizis/fb2-parser",
   "description": "Simple FB2 to HTML parser",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "type": "library",
   "keywords": ["FB2Parser", "parser", "fb2", "html", "php"],
   "license": "MIT",
