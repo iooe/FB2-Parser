@@ -58,9 +58,13 @@ class DocumentFormatter
   public static function getDocumentLinkPrefix(Document $document): string
   {
     $default = 'l';
-    if ($document->has('a') && $document->first('a')->attr($default . ':href') === null) {
-      preg_match('/xmlns:(.*)=/', $document->first('FictionBook')->first('body')->remove()->html(), $linkType);
-      return $linkType[1];
+    if (($a = $document->has('a')) || $document->has('image')) {
+      $element = $a ? 'a' : 'image';
+      if ($document->first($element)->attr($default . ':href') === null) {
+        $fictionBook = $document->first('FictionBook');
+        preg_match('/xmlns:(.*)=/', $fictionBook->html(), $linkType);
+        return $linkType[1];
+      }
     }
     return $default;
   }
