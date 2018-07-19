@@ -62,7 +62,7 @@ class DocumentFormatter
       $element = $a ? 'a' : 'image';
       if ($document->first($element)->attr($default . ':href') === null) {
         $fictionBook = $document->first('FictionBook');
-        preg_match('/xmlns:(.*)=/', $fictionBook->html(), $linkType);
+        preg_match('/xmlns:(.*)=\"http:\/\/www.w3.org\/1999\/xlink\"/', $fictionBook->html(), $linkType);
         return $linkType[1];
       }
     }

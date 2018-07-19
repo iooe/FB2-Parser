@@ -4,7 +4,6 @@ namespace Tizis\FB2\Parser;
 
 use Tizis\FB2\Helpers\DocumentFormatter;
 use Tizis\FB2\Parser\Chapter\Chapter;
-use Tizis\FB2\Parser\Chapter\ChapterImages;
 
 /**
  * Class Chapters
@@ -22,6 +21,7 @@ class Chapters extends Parser
     $this->setXmlDOM($xmlDOM);
     $this->setAttributes($attributes);
     // set document link prefix, fb2 access custom prefix for links
+
     $this->insertAttributes(DocumentFormatter::getDocumentLinkPrefix($xmlDOM), 'linkType');
     // global notes|images counters. Needs for note element identifications.
     $this->insertAttributes(0, 'imagesCounter');
@@ -38,7 +38,6 @@ class Chapters extends Parser
 
     $formatter = DocumentFormatter::getBookNotes($formatter['xmlDOM'], $this->getAttributes()['linkType']);
     $this->insertAttributes($formatter['notes'], 'notes');
-
 
     $this->setXmlDOM($formatter['xmlDOM']);
   }

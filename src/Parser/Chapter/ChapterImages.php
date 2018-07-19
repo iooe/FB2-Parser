@@ -57,6 +57,7 @@ class ChapterImages extends Parser implements IChapterNodes
     $nodes = (array)$this->getXmlElement()->findInDocument('image');
 
     if (\count($nodes) !== 0) {
+
       foreach ($nodes as $node) {
         $noteId = trim($node->attr($linkType . ':href'), '#');
         // if images is exist
