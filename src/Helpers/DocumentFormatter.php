@@ -27,7 +27,7 @@ class DocumentFormatter
     ], [
       '',
       '',
-      '',
+      '<br/>',
       '<i>',
       '</i>'
     ], $html);
